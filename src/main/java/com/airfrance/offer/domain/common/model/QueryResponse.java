@@ -21,7 +21,7 @@ public class QueryResponse<T> {
 
     public QueryResponse<T> addError(String error) {
 
-        if (errors == null || errors.isEmpty()) {
+        if (errors == null) {
             errors = new TreeSet<>();
         }
 
