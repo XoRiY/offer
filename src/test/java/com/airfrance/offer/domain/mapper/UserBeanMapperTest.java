@@ -21,14 +21,14 @@ class UserBeanMapperTest {
 
 
     @Test
-    void testMap() {
+    void testNullParamMap() {
 
         assertNull(userBeanMapper.map(null));
 
     }
 
     @Test
-    void testNullParamMap() {
+    void testMap() {
         assertNotNull(userBeanMapper.map(new User(1L, "", LocalDate.now(), "", "", Gender.M)));
 
     }
