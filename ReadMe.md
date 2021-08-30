@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/codecentric/springboot-sample-app/badge.svg?branch=master)](https://coveralls.io/github/codecentric/springboot-sample-app?branch=master)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-offer test [Spring Boot](http://projects.spring.io/spring-boot/) app
+Offer test [Spring Boot](http://projects.spring.io/spring-boot/) app
 
 Its goal is to expose two endpoint for saving user or getting user's information
 
@@ -22,41 +22,55 @@ There are several ways to run a Spring Boot application on your local machine. O
 
 Alternatively you can use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
 
-to package my app
+To package my app
 ```shell
 mvn clean package
 ```
-to run my app
+To run my app
 
 ```
 java -jar .\target\offer-0.0.1-SNAPSHOT.jar
 ```
 
-or 
+Or 
 
 ```shell
 mvn spring-boot:run
 ```
 
-or simply run [OfferApplication.java class](src/main/java/com/airfrance/offer/OfferApplication.java)
+Or simply run [OfferApplication.java class](src/main/java/com/airfrance/offer/OfferApplication.java)
+
+## accessing to h2 database
+
+http://localhost:8080/offer-api/h2-console
+
+Driver Class :  ``` org.h2.Driver```
+
+JDBC URL : ```jdbc:h2:mem:testdb```
+
+User : ```sa```
+
+Password : ```password```
 
 
 ## Swagger
 
-to accessing to this api swagger's documentations and see witch end point and how to use them use the link below   
+To accessing to this api swagger's documentations and see witch end point and how to use them use the link below   
 
 http://localhost:8080/offer-api/swagger-ui.html
 
 ## PiTest
 
-the Pit test  documentation are aviable on [PiTest.md](/PiTest.md)
+The Pit test  documentation are aviable on [PiTest.md](/PiTest.md)
 
 ## More documentation and help
 
-you can also see [HELP.md](HELP.md) for mor documentation and help 
+You can also see [HELP.md](HELP.md) for mor documentation and help 
 
 ## Post-Man collection
 
-a postman collection was created to automate tests and make them easier to run
+A postman collection was created to automate tests and make them easier to run
+
+Source are on src/test/resources/postman_collections/offertCollection.postman_collection.json 
 
 ### I hope you enjoy my work
