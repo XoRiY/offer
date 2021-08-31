@@ -16,6 +16,12 @@ public class OfferApplication {
         SpringApplication.run(OfferApplication.class, args);
     }
 
+    /**
+     * @param appDesciption
+     * @param appVersion
+     * @return OpenAPI
+     * @apiNote generate Swagger documentation
+     */
     @Bean
     public OpenAPI customOpenAPI(@Value("${spring.application.description}") String appDesciption, @Value("${spring.application.version}") String appVersion) {
         return new OpenAPI()

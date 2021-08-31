@@ -1,7 +1,7 @@
 package com.airfrance.offer.domain
 
 import com.airfrance.offer.domain.common.model.QueryResponse
-import com.airfrance.offer.domain.common.model.Status
+
 import com.airfrance.offer.domain.model.Gender
 import com.airfrance.offer.domain.model.UserBean
 import com.airfrance.offer.domain.service.UserService
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
@@ -55,7 +56,7 @@ class WebControllerGroovyTest extends Specification {
                 .id(5L)
                 .build()
         QueryResponse<UserBean> userQueryResponse = new QueryResponse<UserBean>().setObjectBody(userBean)
-        userQueryResponse.setStatus(Status.OK)
+        userQueryResponse.setStatus(HttpStatus.OK)
         return userQueryResponse
     }
 }

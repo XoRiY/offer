@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserBeanMapper implements Mapper<User, UserBean> {
 
+
+    /**
+     * @param user
+     * @return UserBean
+     */
     @Override
     public UserBean map(User user) {
         if (user != null){

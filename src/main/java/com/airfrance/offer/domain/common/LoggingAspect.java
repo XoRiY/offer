@@ -14,7 +14,12 @@ import org.springframework.util.StopWatch;
 public class LoggingAspect{
     private static final Logger LOGGER = LogManager.getLogger(LoggingAspect.class);
 
-    //AOP expression for which methods shall be intercepted
+    /**
+     * @param proceedingJoinPoint
+     * @return Object
+     * @throws Throwable
+     * @apiNote AOP expression for which methods shall be intercepted
+     */
     @Around("execution(* com.airfrance.offer.domain..*(..)))")
     public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable
     {

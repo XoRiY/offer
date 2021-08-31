@@ -30,8 +30,8 @@ class UserControllerErrorsGetTest {
         mockMvc.perform(get("/users/{id}", -1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(status().is(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors[0]").value("id value must be positive"))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()));
 
@@ -39,16 +39,16 @@ class UserControllerErrorsGetTest {
         mockMvc.perform(get("/users/{id}", 0)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(status().is(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors[0]").value("id value must be positive"))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()));
 
         mockMvc.perform(get("/users/{id}", -999)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(status().is(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors[0]").value("id value must be positive"))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()));
 

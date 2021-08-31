@@ -15,6 +15,12 @@ public class OfferValidation {
     static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     static Validator validator = factory.getValidator();
 
+    /**
+     * @param t
+     * @param <T>
+     * @return List<String>
+     * @apiNote homeMade validator : check for constraints violation and return a list of them
+     */
     public static <T> List<String> validate(T t) {
 
         if (t == null ){
@@ -26,6 +32,11 @@ public class OfferValidation {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * @throws OperationNotSupportedException
+     * @apiNote private constructor : do not change
+     */
     private OfferValidation() throws OperationNotSupportedException {
         throw new OperationNotSupportedException();
     }

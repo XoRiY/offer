@@ -1,7 +1,6 @@
 package com.airfrance.offer.domain;
 
 import com.airfrance.offer.domain.common.model.QueryResponse;
-import com.airfrance.offer.domain.common.model.Status;
 import com.airfrance.offer.domain.model.UserBean;
 import com.airfrance.offer.domain.service.UserService;
 import org.hamcrest.core.IsNull;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,13 +47,13 @@ class UserControllerPostTest {
     @Test
     void shouldReturnOK() throws Exception {
 
-        Mockito.when(userService.saveUser(Mockito.any(UserBean.class))).thenReturn(new QueryResponse<UserBean>().setStatus(Status.OK));
+        Mockito.when(userService.saveUser(Mockito.any(UserBean.class))).thenReturn(new QueryResponse<UserBean>().setStatus(HttpStatus.OK));
 
         String content = "{\"name\": \"0\", \"birthDate\": \"2000-08-17\", \"countryOfResidence\": \"france\", \"phoneNumber\": \"0606060606\",\"gender\": \"Male\"}";
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.errors").value(IsNull.nullValue()));
@@ -72,9 +72,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors").value("user must be adult"));
 
 
@@ -91,9 +91,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors").value("user must live in France"));
 
         Mockito.verify(userService).saveUser(Mockito.any(UserBean.class));
@@ -109,10 +109,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"));
-
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
 
         Mockito.verify(userService).saveUser(Mockito.any(UserBean.class));
 
@@ -128,9 +127,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors[0]").value("Country Of Residence may not be Null or Blank"))
                 .andExpect(jsonPath("$.errors[1]").value("user must live in France"));
 
@@ -147,9 +146,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors").value("Name may not be Null or Blank"));
 
         Mockito.verify(userService).saveUser(Mockito.any(UserBean.class));
@@ -165,8 +164,8 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(status().is(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors").value("Name may not be Null or Blank"));
 
         Mockito.verify(userService).saveUser(Mockito.any(UserBean.class));
@@ -184,9 +183,9 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.errors[0]").value("Birth Date may not be Null"))
                 .andExpect(jsonPath("$.errors[1]").value("Country Of Residence may not be Null or Blank"))
                 .andExpect(jsonPath("$.errors[2]").value("Name may not be Null or Blank"))
@@ -209,12 +208,14 @@ class UserControllerPostTest {
         mockMvc.perform(
                         post("/users").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
-                .andExpect(status().isAccepted())
+                .andExpect(status().is(400))
                 .andExpect(jsonPath("$.objectBody").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.status").value("BAD_CONTENT"))
-                .andExpect(jsonPath("$.errors").isNotEmpty())
-                .andExpect(jsonPath("$.errors").isArray())
-                .andReturn();
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.errors[0]").value("Birth Date may not be Null"))
+                .andExpect(jsonPath("$.errors[1]").value("Country Of Residence may not be Null or Blank"))
+                .andExpect(jsonPath("$.errors[2]").value("Name may not be Null or Blank"))
+                .andExpect(jsonPath("$.errors[3]").value("user must be adult"))
+                .andExpect(jsonPath("$.errors[4]").value("user must live in France"));
 
         Mockito.verify(userService).saveUser(Mockito.any(UserBean.class));
 

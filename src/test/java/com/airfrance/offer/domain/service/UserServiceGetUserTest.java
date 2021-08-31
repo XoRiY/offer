@@ -1,7 +1,6 @@
 package com.airfrance.offer.domain.service;
 
 import com.airfrance.offer.domain.common.model.QueryResponse;
-import com.airfrance.offer.domain.common.model.Status;
 import com.airfrance.offer.domain.mapper.UserBeanMapper;
 import com.airfrance.offer.domain.model.UserBean;
 import com.airfrance.offer.domain.repository.UserRepository;
@@ -12,9 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ class UserServiceGetUserTest {
 
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.OK, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.OK, userQueryResponse.getStatus());
         assertNull(userQueryResponse.getErrors());
         assertEquals(1L, userQueryResponse.getObjectBody().getId());
         assertEquals("john", userQueryResponse.getObjectBody().getName());
@@ -68,7 +67,7 @@ class UserServiceGetUserTest {
         QueryResponse<UserBean> userQueryResponse = userService.getUser(null);
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.BAD_CONTENT, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
         assertEquals(Set.of("id value must be positive"), userQueryResponse.getErrors());
 
         Mockito.verifyNoInteractions(userRepository);
@@ -78,14 +77,14 @@ class UserServiceGetUserTest {
 
 
     @Test
-    void testENullReturnGetUser() {
+    void testNullReturnGetUser() {
 
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         QueryResponse<UserBean> userQueryResponse = userService.getUser(1L);
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.NO_CONTENT, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND, userQueryResponse.getStatus());
         assertNull(userQueryResponse.getErrors());
         assertNull(userQueryResponse.getObjectBody());
 

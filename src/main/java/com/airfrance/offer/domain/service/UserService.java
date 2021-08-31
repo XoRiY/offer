@@ -2,13 +2,13 @@ package com.airfrance.offer.domain.service;
 
 import com.airfrance.offer.domain.common.OfferValidation;
 import com.airfrance.offer.domain.common.model.QueryResponse;
-import com.airfrance.offer.domain.common.model.Status;
 import com.airfrance.offer.domain.mapper.UserBeanMapper;
 import com.airfrance.offer.domain.mapper.UserMapper;
 import com.airfrance.offer.domain.model.UserBean;
 import com.airfrance.offer.domain.repository.UserRepository;
 import com.airfrance.offer.domain.repository.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,12 +33,16 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-
+    /**
+     * @param id
+     * @return {@link QueryResponse<UserBean>}
+     * @apiNote find user on DB, id must be positive
+     */
     public QueryResponse<UserBean> getUser(Long id) {
 
         if (id == null || id < 1) {
             return new QueryResponse<UserBean>().addError("id value must be positive")
-                    .setStatus(Status.BAD_CONTENT);
+                    .setStatus(HttpStatus.BAD_REQUEST);
         }
 
         Optional<User> user = userRepository.findById(id);
@@ -47,20 +51,26 @@ public class UserService {
         if (user.isPresent()) {
             UserBean userBean = userBeanMapper.map(user.get());
             userBeanQueryResponse.setObjectBody(userBean);
-            userBeanQueryResponse.setStatus(Status.OK);
+            userBeanQueryResponse.setStatus(HttpStatus.OK);
             return userBeanQueryResponse;
         }
 
-        return userBeanQueryResponse.setStatus(Status.NO_CONTENT);
+        return userBeanQueryResponse.setStatus(HttpStatus.NOT_FOUND);
 
     }
 
+
+    /**
+     * @param userBean
+     * @return {@link QueryResponse<UserBean>}
+     * @apiNote  save a user on DB, User must be valid
+     */
     public QueryResponse<UserBean> saveUser(UserBean userBean) {
 
         if (userBean == null) {
             return new QueryResponse<UserBean>()
                     .addError("Element userBean is null")
-                    .setStatus(Status.BAD_CONTENT);
+                    .setStatus(HttpStatus.BAD_REQUEST);
         }
 
         SortedSet<String> errors = new TreeSet<>();
@@ -70,11 +80,12 @@ public class UserService {
         if (errors.isEmpty()) {
             userRepository.save(userMapper.map(userBean));
             return new QueryResponse<UserBean>()
-                    .setStatus(Status.OK);
+                    .setStatus(HttpStatus.CREATED);
         }
+
         return new QueryResponse<UserBean>()
                 .setErrors(errors)
-                .setStatus(Status.BAD_CONTENT);
+                .setStatus(HttpStatus.BAD_REQUEST);
     }
 
 

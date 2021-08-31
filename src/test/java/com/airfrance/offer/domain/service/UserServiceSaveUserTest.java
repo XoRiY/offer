@@ -1,7 +1,6 @@
 package com.airfrance.offer.domain.service;
 
 import com.airfrance.offer.domain.common.model.QueryResponse;
-import com.airfrance.offer.domain.common.model.Status;
 import com.airfrance.offer.domain.mapper.UserMapper;
 import com.airfrance.offer.domain.model.UserBean;
 import com.airfrance.offer.domain.repository.UserRepository;
@@ -12,9 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import static com.airfrance.offer.domain.model.Gender.M;
@@ -45,7 +44,7 @@ class UserServiceSaveUserTest {
         QueryResponse<UserBean> userQueryResponse = userService.saveUser(getUserBean());
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.OK, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.CREATED, userQueryResponse.getStatus());
         assertNull(userQueryResponse.getErrors());
         assertNull(userQueryResponse.getObjectBody());
 
@@ -64,7 +63,7 @@ class UserServiceSaveUserTest {
         QueryResponse<UserBean> userQueryResponse = userService.saveUser(null);
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.BAD_CONTENT, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
         assertEquals(Set.of("Element userBean is null"), userQueryResponse.getErrors());
         assertNull(userQueryResponse.getObjectBody());
 
@@ -79,7 +78,7 @@ class UserServiceSaveUserTest {
         QueryResponse<UserBean> userQueryResponse = userService.saveUser(UserBean.builder().build());
 
         assertNotNull(userQueryResponse);
-        assertEquals(Status.BAD_CONTENT, userQueryResponse.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
         assertEquals(5, userQueryResponse.getErrors().size());
 
 

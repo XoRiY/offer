@@ -14,6 +14,10 @@ public enum Gender {
         this.shortLabel = shortLabel;
     }
 
+    /**
+     * @return String
+     * @apiNote  only for JSON use, return label for static value
+     */
     @JsonValue
     public String getLable() {
         return label;
