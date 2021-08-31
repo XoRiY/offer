@@ -13,19 +13,26 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Optional;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final UserBeanMapper userBeanMapper;
+
+    private final UserMapper userMapper;
 
     @Autowired
-    UserBeanMapper userBeanMapper;
+    public UserService(UserRepository userRepository, UserBeanMapper userBeanMapper, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userBeanMapper = userBeanMapper;
+        this.userMapper = userMapper;
+    }
 
-    @Autowired
-    UserMapper userMapper;
 
     public QueryResponse<UserBean> getUser(Long id) {
 

@@ -17,8 +17,14 @@ import javax.validation.constraints.NotNull;
 @RequestMapping(value = "/users", produces = "application/json")
 public class UserController {
 
+
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController (UserService userService){
+        this.userService= userService;
+    }
+
 
 
     @GetMapping(path = "/{id}", produces = {"application/json"})
