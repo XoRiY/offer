@@ -1,16 +1,24 @@
 package com.airfrance.offer.domain.repository.model;
 
+import com.airfrance.offer.domain.common.validation.annotation.IsAdult;
+import com.airfrance.offer.domain.common.validation.annotation.ValidCountry;
 import com.airfrance.offer.domain.model.Gender;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
+/**
+ * @author Tahar Kerdoud
+ * @apiNote Entity, used by repository to save/find object in/from DB
+ */
 @Setter
 @Getter
 @Entity(name = "USER")
@@ -19,7 +27,7 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -28,11 +36,12 @@ public class User {
     private String name;
 
     @NotNull(message = "birthDate may not be null")
-    @Past
+    @IsAdult
     private LocalDate birthDate;
 
     @NotNull(message = "countryOfResidence may not be null")
     @NotBlank
+    @ValidCountry
     private String countryOfResidence;
 
     private String phoneNumber;
@@ -41,7 +50,7 @@ public class User {
     private Gender gender;
 
     @Tolerate
-    public User(){
+    public User() {
         // to solve conflict with lombok builder
     }
 

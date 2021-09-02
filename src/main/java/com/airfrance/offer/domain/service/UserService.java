@@ -1,7 +1,9 @@
 package com.airfrance.offer.domain.service;
 
-import com.airfrance.offer.domain.common.OfferValidation;
+import com.airfrance.offer.domain.common.exception.BadContentException;
+import com.airfrance.offer.domain.common.exception.ResourceNotFoundException;
 import com.airfrance.offer.domain.common.model.QueryResponse;
+import com.airfrance.offer.domain.common.validation.OfferValidation;
 import com.airfrance.offer.domain.mapper.UserBeanMapper;
 import com.airfrance.offer.domain.mapper.UserMapper;
 import com.airfrance.offer.domain.model.UserBean;
@@ -11,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * @author Tahar Kerdoud
+ * @apiNote Business class service
+ */
 @Service
 public class UserService {
 
@@ -41,21 +45,21 @@ public class UserService {
     public QueryResponse<UserBean> getUser(Long id) {
 
         if (id == null || id < 1) {
-            return new QueryResponse<UserBean>().addError("id value must be positive")
-                    .setStatus(HttpStatus.BAD_REQUEST);
+            throw  new IllegalArgumentException("id value must be positive");
         }
 
         Optional<User> user = userRepository.findById(id);
         QueryResponse<UserBean> userBeanQueryResponse = new QueryResponse<>();
 
-        if (user.isPresent()) {
-            UserBean userBean = userBeanMapper.map(user.get());
-            userBeanQueryResponse.setObjectBody(userBean);
-            userBeanQueryResponse.setStatus(HttpStatus.OK);
-            return userBeanQueryResponse;
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("no resource was found for id :" + id);
         }
 
-        return userBeanQueryResponse.setStatus(HttpStatus.NOT_FOUND);
+        UserBean userBean = userBeanMapper.map(user.get());
+        userBeanQueryResponse.setObjectBody(userBean);
+        userBeanQueryResponse.setStatus(HttpStatus.OK);
+        return userBeanQueryResponse;
+
 
     }
 
@@ -63,57 +67,19 @@ public class UserService {
     /**
      * @param userBean
      * @return {@link QueryResponse<UserBean>}
-     * @apiNote  save a user on DB, User must be valid
+     * @apiNote save a user on DB, User must be valid
      */
     public QueryResponse<UserBean> saveUser(UserBean userBean) {
-
-        if (userBean == null) {
-            return new QueryResponse<UserBean>()
-                    .addError("Element userBean is null")
-                    .setStatus(HttpStatus.BAD_REQUEST);
+        List<String> constraintsList = OfferValidation.validate(userBean);
+        if (!constraintsList.isEmpty()) {
+            throw new BadContentException(new TreeSet<>(constraintsList));
         }
 
-        SortedSet<String> errors = new TreeSet<>();
-        errors.addAll(OfferValidation.validate(userBean));
-        errors.addAll(adultAndLivingInFrance(userBean));
-
-        if (errors.isEmpty()) {
-            userRepository.save(userMapper.map(userBean));
-            return new QueryResponse<UserBean>()
-                    .setStatus(HttpStatus.CREATED);
-        }
-
+        userRepository.save(userMapper.map(userBean));
         return new QueryResponse<UserBean>()
-                .setErrors(errors)
-                .setStatus(HttpStatus.BAD_REQUEST);
+                .setStatus(HttpStatus.CREATED);
+
     }
 
 
-    private SortedSet<String> adultAndLivingInFrance(UserBean userBean) {
-        SortedSet<String> errors = new TreeSet<>();
-        String errorAdult = userIsAdult(userBean);
-        String errorLiveInFrance = userLiveInFrance(userBean);
-
-        if (errorAdult != null)
-            errors.add(errorAdult);
-
-        if (errorLiveInFrance != null)
-            errors.add(errorLiveInFrance);
-
-        return errors;
-    }
-
-    private String userIsAdult(UserBean userBean) {
-        if (userBean.getBirthDate() != null && ChronoUnit.YEARS.between(userBean.getBirthDate(), LocalDate.now()) > 18) {
-            return null;
-        }
-        return "user must be adult";
-    }
-
-    private String userLiveInFrance(UserBean userBean) {
-        if (userBean != null && "france".equalsIgnoreCase(userBean.getCountryOfResidence())) {
-            return null;
-        }
-        return "user must live in France";
-    }
 }

@@ -1,5 +1,6 @@
 package com.airfrance.offer.domain.service;
 
+import com.airfrance.offer.domain.common.exception.BadContentException;
 import com.airfrance.offer.domain.common.model.QueryResponse;
 import com.airfrance.offer.domain.mapper.UserMapper;
 import com.airfrance.offer.domain.model.UserBean;
@@ -14,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
+import java.util.TreeSet;
 
 import static com.airfrance.offer.domain.model.Gender.M;
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,12 +62,11 @@ class UserServiceSaveUserTest {
     @Test
     void testNullSaveUser() {
 
-        QueryResponse<UserBean> userQueryResponse = userService.saveUser(null);
+        BadContentException exception = assertThrows(BadContentException.class, () -> {
+            userService.saveUser(null);
+        });
 
-        assertNotNull(userQueryResponse);
-        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
-        assertEquals(Set.of("Element userBean is null"), userQueryResponse.getErrors());
-        assertNull(userQueryResponse.getObjectBody());
+        assertEquals(new TreeSet<>(List.of("object may not be null")), exception.getMsgs());
 
         Mockito.verifyNoInteractions(userRepository);
         Mockito.verifyNoInteractions(userMapper);
@@ -74,13 +75,15 @@ class UserServiceSaveUserTest {
 
     @Test
     void testEmptySaveUser() {
+        BadContentException exception = assertThrows(BadContentException.class, () -> {
+            userService.saveUser(UserBean.builder().build());
+        });
 
-        QueryResponse<UserBean> userQueryResponse = userService.saveUser(UserBean.builder().build());
-
-        assertNotNull(userQueryResponse);
-        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
-        assertEquals(5, userQueryResponse.getErrors().size());
-
+        assertEquals(
+                new TreeSet<>(
+                        List.of("Birth Date may not be Null", "Country Of Residence may not be Null or Blank",
+                                "Name may not be Null or Blank", "user must be adult", "user must live in France")),
+                exception.getMsgs());
 
         Mockito.verifyNoInteractions(userRepository);
         Mockito.verifyNoInteractions(userMapper);

@@ -4,6 +4,10 @@ import com.airfrance.offer.domain.model.UserBean;
 import com.airfrance.offer.domain.repository.model.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Tahar Kerdoud
+ * @apiNote implementation of Inteface mapper
+ */
 @Component
 public class UserBeanMapper implements Mapper<User, UserBean> {
 

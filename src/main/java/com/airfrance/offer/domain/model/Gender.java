@@ -2,6 +2,9 @@ package com.airfrance.offer.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * @author Tahar Kerdoud
+ */
 public enum Gender {
 
     M("Male", "M"), F("Female", "F");

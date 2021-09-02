@@ -9,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * Main class to run api {@link OfferApplication}
+ */
 @SpringBootApplication
 public class OfferApplication {
 

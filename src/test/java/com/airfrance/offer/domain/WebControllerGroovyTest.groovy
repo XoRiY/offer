@@ -4,6 +4,8 @@ import com.airfrance.offer.domain.common.model.QueryResponse
 
 import com.airfrance.offer.domain.model.Gender
 import com.airfrance.offer.domain.model.UserBean
+import com.airfrance.offer.domain.repository.UserRepository
+import com.airfrance.offer.domain.repository.model.User
 import com.airfrance.offer.domain.service.UserService
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -30,34 +32,37 @@ class WebControllerGroovyTest extends Specification {
     private MockMvc mvc
 
     @MockBean
-    private UserService userService
+    private UserRepository userRepository
+
 
     def "when get is performed then the response has status 200 and return entire Object"()
-
-
     {
-        Mockito.when(userService.getUser(5L)).thenReturn(getQueryResponse())
+        Mockito.when(userRepository.findById(5L)).thenReturn(getUser())
+
+
         expect:
         "Status is 200 and return entire objectBody"
         mvc.perform( get("/users/{id}", 5))
                 .andExpect(status().isOk())
                 .andReturn()
                 .response
-                .contentAsString == "{\"status\":\"OK\",\"objectBody\":{\"id\":5,\"name\":\"tahar\",\"birthDate\":\"01-01-1987\",\"countryOfResidence\":\"France\",\"phoneNumber\":\"0678901234\",\"gender\":\"Male\"},\"errors\":null}"
+                .contentAsString == "{\"status\":\"OK\",\"timestamp\":null,\"objectBody\":{\"id\":5,\"name\":\"john\",\"birthDate\":\"12-12-2000\",\"countryOfResidence\":\"france\",\"phoneNumber\":\"0606060606\",\"gender\":\"Male\"},\"errors\":null}"
+
     }
 
-    private static QueryResponse<UserBean> getQueryResponse() {
-        UserBean userBean = UserBean.builder()
-                .name("tahar")
-                .birthDate(LocalDate.of(1987, 01, 01))
+
+    private static Optional<User> getUser() {
+
+        User user = User.builder()
+                .name("john")
+                .birthDate(LocalDate.of(2000, 12, 12))
                 .gender(Gender.M)
-                .phoneNumber("0678901234")
-                .countryOfResidence("France")
+                .phoneNumber("0606060606")
+                .countryOfResidence("france")
                 .id(5L)
                 .build()
-        QueryResponse<UserBean> userQueryResponse = new QueryResponse<UserBean>().setObjectBody(userBean)
-        userQueryResponse.setStatus(HttpStatus.OK)
-        return userQueryResponse
+
+        return Optional.of(user)
     }
 }
 

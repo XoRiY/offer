@@ -1,4 +1,4 @@
-package com.airfrance.offer.domain.common;
+package com.airfrance.offer.domain.common.validation;
 
 
 import javax.naming.OperationNotSupportedException;

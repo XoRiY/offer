@@ -1,5 +1,6 @@
 package com.airfrance.offer.domain.service;
 
+import com.airfrance.offer.domain.common.exception.ResourceNotFoundException;
 import com.airfrance.offer.domain.common.model.QueryResponse;
 import com.airfrance.offer.domain.mapper.UserBeanMapper;
 import com.airfrance.offer.domain.model.UserBean;
@@ -15,7 +16,6 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.airfrance.offer.domain.model.Gender.M;
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,11 +64,11 @@ class UserServiceGetUserTest {
     @Test
     void testNullIDGetUser() {
 
-        QueryResponse<UserBean> userQueryResponse = userService.getUser(null);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.getUser(-999L);
+        });
 
-        assertNotNull(userQueryResponse);
-        assertEquals(HttpStatus.BAD_REQUEST, userQueryResponse.getStatus());
-        assertEquals(Set.of("id value must be positive"), userQueryResponse.getErrors());
+        assertEquals("id value must be positive", exception.getMessage());
 
         Mockito.verifyNoInteractions(userRepository);
         Mockito.verifyNoInteractions(userBeanMapper);
@@ -79,14 +79,15 @@ class UserServiceGetUserTest {
     @Test
     void testNullReturnGetUser() {
 
+
+
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
-        QueryResponse<UserBean> userQueryResponse = userService.getUser(1L);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            userService.getUser(1L);
+        });
 
-        assertNotNull(userQueryResponse);
-        assertEquals(HttpStatus.NOT_FOUND, userQueryResponse.getStatus());
-        assertNull(userQueryResponse.getErrors());
-        assertNull(userQueryResponse.getObjectBody());
+        assertEquals("no resource was found for id :1", exception.getMessage());
 
         Mockito.verify(userRepository).findById(1L);
         Mockito.verifyNoMoreInteractions(userRepository);
@@ -95,6 +96,7 @@ class UserServiceGetUserTest {
     }
 
     private User getUser() {
+
         return User.builder()
                 .name("john")
                 .birthDate(LocalDate.of(2000, 12, 12))

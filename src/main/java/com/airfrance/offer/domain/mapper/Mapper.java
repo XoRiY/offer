@@ -1,5 +1,12 @@
 package com.airfrance.offer.domain.mapper;
 
+/**
+ * @param <S>
+ * @param <T>
+ * @author Tahar Kerdoud
+ * Inteface mapper
+ * must be implemented by every Mapper
+ */
 public interface Mapper<S, T> {
 
     /**

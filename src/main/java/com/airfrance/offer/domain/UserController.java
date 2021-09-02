@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 
-
+/**
+ * @author Tahar Kerdoud
+ * @apiNote Rest controller
+ */
 @RestController
 @RequestMapping(value = "/users", produces = "application/json")
 public class UserController {
@@ -35,7 +37,7 @@ public class UserController {
 
 
     @PostMapping(produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<QueryResponse<UserBean>> post(@RequestBody @NotNull UserBean userBean) {
+    public ResponseEntity<QueryResponse<UserBean>> post(@RequestBody UserBean userBean) {
 
         QueryResponse<UserBean> userBeanQueryResponse = userService.saveUser(userBean);
 

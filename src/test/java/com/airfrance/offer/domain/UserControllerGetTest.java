@@ -4,7 +4,8 @@ package com.airfrance.offer.domain;
 import com.airfrance.offer.domain.common.model.QueryResponse;
 import com.airfrance.offer.domain.model.Gender;
 import com.airfrance.offer.domain.model.UserBean;
-import com.airfrance.offer.domain.service.UserService;
+import com.airfrance.offer.domain.repository.UserRepository;
+import com.airfrance.offer.domain.repository.model.User;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +20,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerGetTest {
 
     @MockBean
-    private UserService userService;
+    UserRepository userRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,15 +42,16 @@ class UserControllerGetTest {
     @Test
     void shouldReturnACorrectObject() throws Exception {
 
-        Mockito.when(userService.getUser(5L)).thenReturn(getQueryResponse());
+        Mockito.when(userRepository.findById(5L)).thenReturn(getUser());
 
         mockMvc.perform(
                         get("/users/{id}", 5)
                                 .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.errors").value(IsNull.nullValue()))
-                .andExpect(jsonPath("$.objectBody.id").value("1"))
+                .andExpect(jsonPath("$.objectBody.id").value("5"))
                 .andExpect(jsonPath("$.objectBody.name").value("john"))
                 .andExpect(jsonPath("$.objectBody.birthDate").value("12-12-2000"))
                 .andExpect(jsonPath("$.objectBody.countryOfResidence").value("france"))
@@ -56,22 +60,24 @@ class UserControllerGetTest {
                 );
 
 
-        Mockito.verify(userService).getUser(Mockito.anyLong());
+        Mockito.verify(userRepository).findById(Mockito.anyLong());
+        Mockito.verifyNoMoreInteractions(userRepository);
 
     }
 
-    private QueryResponse<UserBean> getQueryResponse() {
-        UserBean userBean = UserBean.builder()
+    private Optional<User> getUser() {
+
+        User user = User.builder()
                 .name("john")
                 .birthDate(LocalDate.of(2000, 12, 12))
                 .gender(Gender.M)
                 .phoneNumber("0606060606")
                 .countryOfResidence("france")
-                .id(1L)
+                .id(5L)
                 .build();
-        QueryResponse<UserBean> userQueryResponse = new QueryResponse<UserBean>().setObjectBody(userBean);
-        userQueryResponse.setStatus(HttpStatus.OK);
-        return userQueryResponse;
+
+        return Optional.of(user);
     }
+
 
 }

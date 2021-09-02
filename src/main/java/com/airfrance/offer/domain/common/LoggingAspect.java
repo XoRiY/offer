@@ -9,9 +9,14 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+/**
+ * @author Tahar Kerdoud
+ * @apiNote class for AOP logging
+ * can be handled ase you wich
+ */
 @Aspect
 @Component
-public class LoggingAspect{
+public class LoggingAspect {
     private static final Logger LOGGER = LogManager.getLogger(LoggingAspect.class);
 
     /**
@@ -21,8 +26,7 @@ public class LoggingAspect{
      * @apiNote AOP expression for which methods shall be intercepted
      */
     @Around("execution(* com.airfrance.offer.domain..*(..)))")
-    public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
+    public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
 
         //Get intercepted method details
@@ -37,7 +41,7 @@ public class LoggingAspect{
         stopWatch.stop();
 
         //Log method execution time
-        LOGGER.info("Execution time of {}.{} :: {} ms", className , methodName, stopWatch.getTotalTimeMillis());
+        LOGGER.info("Execution time of {}.{} :: {} ms", className, methodName, stopWatch.getTotalTimeMillis());
 
         return result;
     }
