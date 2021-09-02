@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "eec9123e-3222-46f3-acca-422c686f5ace",
+		"name": "offertCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post valid object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post valid object\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(201)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"tahar\",\r\n  \"birthDate\": \"1987-01-01\",\r\n  \"countryOfResidence\": \"France\",\r\n  \"phoneNumber\": \"0678901234\",\r\n  \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(404)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/offer-api/users/9999",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get request id 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(200)\r",
+							"    }\r",
+							")\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/offer-api/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post minimal object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(201)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"tahar\",\r\n  \"birthDate\": \"1987-01-01\",\r\n  \"countryOfResidence\": \"France\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post object without Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(400)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"\",\r\n  \"birthDate\": \"1987-01-01\",\r\n  \"countryOfResidence\": \"France\",\r\n  \"phoneNumber\": \"0678901234\",\r\n  \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post object without countryOfResidence",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(400)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"test\",\r\n  \"birthDate\": \"1987-01-01\",\r\n  \"phoneNumber\": \"0678901234\",\r\n  \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post object without birth date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(400)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"name\",\r\n  \"countryOfResidence\": \"France\",\r\n  \"phoneNumber\": \"0678901234\",\r\n  \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post object without required attribute",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status\", \r",
+							"    function(){\r",
+							"        pm.response.to.have.status(400)\r",
+							"    }\r",
+							")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gender\": \"Male\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/offer-api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offer-api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
