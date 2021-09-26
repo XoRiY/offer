@@ -38,7 +38,7 @@ Or
 mvn spring-boot:run
 ```
 
-Or simply run [OfferApplication.java class](src/main/java/com/airfrance/offer/OfferApplication.java)
+Or simply run [OfferApplication.java class](src/main/java/com/ktr/offer/OfferApplication.java)
 
 ## accessing to h2 database
 

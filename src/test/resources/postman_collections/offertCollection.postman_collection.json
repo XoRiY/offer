@@ -12,11 +12,23 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"post valid object\", \r",
+							"pm.test(\"status\", \r",
 							"    function(){\r",
 							"        pm.response.to.have.status(201)\r",
 							"    }\r",
-							")"
+							")\r",
+							"\r",
+							"pm.test(\"body\", () => {\r",
+							"    //parse the response json and test three properties\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.id).to.be.not.null;\r",
+							"    pm.expect(responseJson.id > 0 ).to.true;\r",
+							"    pm.expect(responseJson.name).to.eql('tahar');\r",
+							"    pm.expect(responseJson.birthDate).to.eql('01-01-1987');\r",
+							"    pm.expect(responseJson.countryOfResidence).to.eql('France');\r",
+							"    pm.expect(responseJson.phoneNumber).to.eql('0678901234');\r",
+							"    pm.expect(responseJson.gender).to.eql('Male');\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -35,11 +47,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"
@@ -69,11 +81,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/offer-api/users/9999",
+					"raw": "localhost:9880/offer-api/users/9999",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users",
@@ -105,11 +117,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/offer-api/users/1",
+					"raw": "localhost:9880/offer-api/users/1",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users",
@@ -130,7 +142,19 @@
 							"    function(){\r",
 							"        pm.response.to.have.status(201)\r",
 							"    }\r",
-							")"
+							")\r",
+							"\r",
+							"pm.test(\"body\", () => {\r",
+							"    //parse the response json and test three properties\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.id).to.be.not.null;\r",
+							"    pm.expect(responseJson.id > 0 ).to.true;\r",
+							"    pm.expect(responseJson.name).to.eql('tahar');\r",
+							"    pm.expect(responseJson.birthDate).to.eql('01-01-1987');\r",
+							"    pm.expect(responseJson.countryOfResidence).to.eql('France');\r",
+							"    pm.expect(responseJson.phoneNumber).to.be.null;\r",
+							"    pm.expect(responseJson.gender).to.null;\r",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -149,11 +173,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"
@@ -192,11 +216,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"
@@ -235,11 +259,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"
@@ -278,11 +302,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"
@@ -321,11 +345,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/offer-api/users",
+					"raw": "localhost:9880/offer-api/users",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "9880",
 					"path": [
 						"offer-api",
 						"users"

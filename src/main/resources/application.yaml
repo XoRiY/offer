@@ -22,6 +22,7 @@ spring:
     locale: FR
 
 server:
+  port: 9880
   servlet:
     context-path: /offer-api
 
